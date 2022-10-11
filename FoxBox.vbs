@@ -1230,6 +1230,7 @@ Sub Update_PlayerNote()
 			If headshotExists Then
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=" & teamAbbreviation)
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "-WOMEN" & "/" & headshotFileName)
+				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "/" & headshotFileName)
 			Else
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
@@ -3478,7 +3479,8 @@ Sub UpdateNationalAnThemFlag()
 		teamAbb = Game.Home.Abbreviation
 	End If
 
-	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET L3_LOAD=" & teamAbb)	
+	'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET L3_LOAD=" & teamAbb)	
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET L3_LIVE=" & teamAbb)	
 End Sub
 
 Sub Retract_NationalAnthem()
