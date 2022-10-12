@@ -1209,7 +1209,8 @@ Sub Update_PlayerNote()
 		End If
 
 		'TRI_LASTNAME_FIRSTNAME_960
-		headshotFileName = teamAbbreviation & "-WOMEN" & "_" & .LastName & "_" & .FirstName & "_960" 
+		'headshotFileName = teamAbbreviation & "-WOMEN" & "_" & .LastName & "_" & .FirstName & "_960" 
+		headshotFileName = teamAbbreviation & "_" & .LastName & "_" & .FirstName & "_960" 
 
 		Set objplayerNote = .Notes.GetNoteByTitle(Plugin.PlayerNoteSelected)
 		
@@ -1227,14 +1228,13 @@ Sub Update_PlayerNote()
 		
 		If Plugin.PlayerNoteWithHeadshot Then
 			'setting headshots
-			If headshotExists Then
+			'If headshotExists Then
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=" & teamAbbreviation)
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "-WOMEN" & "/" & headshotFileName)
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "/" & headshotFileName)
-			Else
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
-			End If
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "/" & headshotFileName)
+			'Else
+				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
+				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
+			'End If
 		Else
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
