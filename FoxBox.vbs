@@ -1228,13 +1228,13 @@ Sub Update_PlayerNote()
 		
 		If Plugin.PlayerNoteWithHeadshot Then
 			'setting headshots
-			'If headshotExists Then
+			If headshotExists Then
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=" & teamAbbreviation)
 				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "/" & headshotFileName)
-			'Else
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
-			'End If
+			Else
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
+			End If
 		Else
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
