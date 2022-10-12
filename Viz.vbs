@@ -302,7 +302,8 @@ Sub Get_VizHomeHeadshots()
 
 	Dim cmd
 	
-	cmd = "R_HomeHeadShots IMAGE*" & HEADSHOT_DIRECTORY_GH & Game.Home.Abbreviation & "-WOMEN" & " GET"
+	'cmd = "R_HomeHeadShots IMAGE*" & HEADSHOT_DIRECTORY_GH & Game.Home.Abbreviation & "-WOMEN" & " GET"
+	cmd = "R_HomeHeadShots IMAGE*" & HEADSHOT_DIRECTORY_GH & Game.Home.Abbreviation & " GET"
 
 	Viz_Send(cmd)
 End Sub
@@ -312,7 +313,8 @@ Sub Get_VizVisitorsHeadshots()
 
 	Dim cmd
 	
-	cmd = "R_VisitorsHeadShots IMAGE*" & HEADSHOT_DIRECTORY_GH & Game.Visitors.Abbreviation & "-WOMEN" & " GET"
+	'cmd = "R_VisitorsHeadShots IMAGE*" & HEADSHOT_DIRECTORY_GH & Game.Visitors.Abbreviation & "-WOMEN" & " GET"
+	cmd = "R_VisitorsHeadShots IMAGE*" & HEADSHOT_DIRECTORY_GH & Game.Visitors.Abbreviation & " GET"
 
 	Viz_Send(cmd)
 End Sub
