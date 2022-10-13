@@ -89,8 +89,8 @@ Sub FoxBox_GoToState(p_sStateName)
 			
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET BASE_DISPATCH=FALSE") 
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=OFF")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET BASE_WIDTH=0") 
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET POPUP_NOTELINE_DISPATCH=OFF") 
+			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET BASE_WIDTH=0") 
+			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET POPUP_NOTELINE_DISPATCH=OFF") 
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SIDEPOD_DISPATCH_AGG_LOAD=SIDEPOD_AGG_OFF") 
 
 			CurrentState =  "Retracted"
@@ -323,7 +323,7 @@ Sub FoxBox_GoToFoxBox()
 			UpdateHeader
 			'Insert FoxBox
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET BASE_DISPATCH=TRUE") 
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET BASE_WIDTH=1") 
+			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET BASE_WIDTH=1") 
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=OFF") 
 
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SIDEPOD_REQUEST=OFF") 
@@ -1620,7 +1620,7 @@ Sub FoxBox_SetExtension(p_sExtensionName, p_fState)
 End Sub
 
 Sub UpdateHeader()
-	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET POPUP_NOTELINE_LIVE=" & PluginSettings.FoxBoxHeader)
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET POPUP_NOTELINE_LIVE=" & HEADER_DOUBLEQUOTES & PluginSettings.FoxBoxHeader & HEADER_DOUBLEQUOTES)
 End Sub
 
 ' FoxBox Update Extension:
@@ -2778,6 +2778,10 @@ Sub Update_Substitution()
 			numSubs = "2nd" & Chr(32)
 		Case 3
 			numSubs = "3rd" & Chr(32)
+		Case 4
+			numSubs = "4th" & Chr(32)
+		Case 5
+			numSubs = "5th" & Chr(32)
 	End Select
 
 	Set objIncoming = Game.GameEvents.SelectedEvent.Player2
