@@ -81,6 +81,8 @@ Sub Application_Startup()
 	UpdateHomeSelected
 	UpdateVisitorsSelected
 
+	Plugin.ReverseTeamOrder = Settings.ReverseTeamOrder
+
 End Sub
 
 ' Application Shutdown:

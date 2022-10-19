@@ -1682,6 +1682,9 @@ Sub Update_PossessionChart()
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TIME_OF_POSSESSION/T2_BAR_LOAD=" & sVisitorsStat)
 End Sub
 
+Sub TeamNote_Change()
+	Plugin.TeamNotesRefresh
+End Sub
 
 '=====================================================================
 '	GAME NOTE
