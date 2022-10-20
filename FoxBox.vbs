@@ -845,8 +845,70 @@ Sub Update_TeamNote()
 	Dim teamName
 	Dim teamNoteText
 	Dim tmp
+	Dim objTeamNote
 
-	'If PluginSettings.TeamNoteSelectedTeam = 1 Then
+	If Plugin.TeamNoteSelectedTeam = 1 Then
+		'home selected
+		teamName = Game.Home.ShortAbbreviation	
+		Set objTeamNote = Game.Home.Notes.GetNoteByTitle(Plugin.TeamNoteSelected)
+		'teamNoteText = Game.Home.Notes.GetNoteByTitle(Plugin.TeamNoteSelected)
+	Else
+		'away selected
+		teamName = Game.Visitors.ShortAbbreviation
+		Set objTeamNote = Game.Visitors.Notes.GetNoteByTitle(Plugin.TeamNoteSelected)
+		'teamNoteText = Game.Visitors.Notes.GetNoteByTitle(Plugin.TeamNoteSelected)
+	End If
+
+	If Not objTeamNote Is Nothing Then
+		Log.LogEvent "Team Note " & Plugin.TeamNoteSelected & " FOUND ",  "Debug", 0, "Renderer"
+		teamNoteText = objTeamNote.Body
+	Else
+		Log.LogEvent "Team Note " & Plugin.TeamNoteSelected & " NOT FOUND ", "Debug", 0, "Renderer"
+		Exit Sub
+	End If
+
+	tmp = Split(teamNoteText, "\")
+
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/JERSEY1_LOAD=")
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/TIME_LOAD=")
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/TRICODE_DISPLAY_LOAD=" & HEADER_DOUBLEQUOTES & teamName & HEADER_DOUBLEQUOTES)
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
+
+	Select Case Ubound(tmp)
+		Case 0
+			'Single line note
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/PLAYER_NAME_LOAD=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES) 
+	'		making sure notes below are empty
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LOAD=")
+			
+			'dropdown type
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES")
+		Case 1
+			'2 line note
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/PLAYER_NAME_LOAD=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES) 
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LOAD=" & HEADER_DOUBLEQUOTES & tmp(1) & HEADER_DOUBLEQUOTES)
+
+			'dropdown type
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES_NOTE")
+		Case 2
+			'3 line note
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/PLAYER_NAME_LOAD=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES) 
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LOAD=" & HEADER_DOUBLEQUOTES & tmp(1) & HEADER_DOUBLEQUOTES)
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LOAD=" & HEADER_DOUBLEQUOTES & tmp(2) & HEADER_DOUBLEQUOTES)
+
+			'dropdown type
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES_NOTE2")
+		Case else
+			' do nothing
+	End Select
+End Sub
+
+Sub Update_TeamNote_Original()
+	Dim teamName
+	Dim teamNoteText
+	Dim tmp
+
 	If Plugin.TeamNoteSelectedTeam = 1 Then
 		'home selected
 		teamName = Game.Home.ShortAbbreviation	
@@ -894,6 +956,11 @@ Sub Update_TeamNote()
 	End Select
 End Sub
 
+'This is called from Plugin
+Sub TeamNote_Change()
+	'Plugin.ReverseTeamOrder = Settings.ReverseTeamOrder
+	Plugin.TeamNotesRefresh
+End Sub
 
 '=====================================================================
 '	BILLBOARD SPONSOR	
@@ -1680,10 +1747,6 @@ Sub Update_PossessionChart()
 	
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TIME_OF_POSSESSION/T1_BAR_LOAD=" & sHomeStat)
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TIME_OF_POSSESSION/T2_BAR_LOAD=" & sVisitorsStat)
-End Sub
-
-Sub TeamNote_Change()
-	Plugin.TeamNotesRefresh
 End Sub
 
 '=====================================================================
