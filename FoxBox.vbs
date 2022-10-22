@@ -96,6 +96,8 @@ Sub FoxBox_GoToState(p_sStateName)
 			CurrentState =  "Retracted"
                         
 		Case "FoxBox"
+			Set_SubstitutionChip
+			
 			FoxBox_GoToFoxBox
 
 			CurrentState =  "FOXBOX"
@@ -2933,9 +2935,9 @@ End Sub
 'This gets called in SoccerPlugin body
 Sub Initialize_SubstitutionCount()
 	
-	For i = 1 to 3
-		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB" & i & "=1")
-		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB" & i & "=1")
+	For i = 1 to PluginSettings.MaxSubstitutionCounts
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=1")
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=1")
 	Next
 	
 End Sub
@@ -2945,39 +2947,52 @@ Sub Update_SubstitutionCount_Home()
 	Dim i
 	Dim subRemaining
 
-	'Get_SubstitutionCount_Home
-
 	With Plugin
-		If .HomeSubstitutionCount > 3 Then
+		
+		If .HomeSubstitutionCount > PluginSettings.MaxSubstitutionCounts Then
 			Exit Sub
 		End If
 
 		subRemaining = .HomeSubstitutionCount
 		
-		If subRemaining = 3 Then
-			For i = 1 to 3
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB" & i & "=1")
+		If subRemaining = PluginSettings.MaxSubstitutionCounts Then
+			For i = 1 to PluginSettings.MaxSubstitutionCounts
+				If Settings.ReverseTeamOrder Then
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=1")
+				Else
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=1")
+				End If
 			Next
+		Else
+			If subRemaining  > 0 Then  
+				For i = 1 to subRemaining  
+					If Settings.ReverseTeamOrder Then
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=1")
+					Else
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=1" )
+					End If
+				Next
+				
+				For i = subRemaining + 1 to PluginSettings.MaxSubstitutionCounts
+
+					If Settings.ReverseTeamOrder Then
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=0")
+					Else
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=0" )
+					End If
+				Next
+			Else
+				For i = 1 to PluginSettings.MaxSubstitutionCounts
+					If Settings.ReverseTeamOrder Then
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=0")
+					Else
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=0")
+					End If
+				Next
+	
+			End If
 		End If
 
-		If subRemaining = 2 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB1=1")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB2=1")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB3=0")
-		End If
-
-		If subRemaining = 1 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB1=1")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB2=0")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB3=0")
-
-		End If
-
-		If subRemaining = 0 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB1=0")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB2=0")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET AWAY_SUB3=0")
-		End If
 	End With
 End Sub
 
@@ -2986,67 +3001,145 @@ Sub Update_SubstitutionCount_Visitors()
 	Dim i
 	Dim subRemaining
 	
-
-	'Get_SubstitutionCount_Visitors
-	
-
 	With Plugin
-		If .VisitorsSubstitutionCount > 3 Then
+		If .VisitorsSubstitutionCount > PluginSettings.MaxSubstitutionCounts Then
 			Exit Sub
 		End If
 
 		subRemaining = .VisitorsSubstitutionCount
 		
-		If subRemaining = 3 Then
-			For i = 1 to 3
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB" & i & "=1")
+		If subRemaining = PluginSettings.MaxSubstitutionCounts Then
+			For i = 1 to PluginSettings.MaxSubstitutionCounts
+
+				If Settings.ReverseTeamOrder Then
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=1")
+				Else	
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=1")
+				End if
 			Next
+		Else
+			If subRemaining  > 0 Then
+				For i = 1 to subRemaining 
+
+					If Settings.ReverseTeamOrder Then
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=1")
+					Else
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=1")
+					End If
+
+				Next
+
+				For i = subRemaining + 1 to PluginSettings.MaxSubstitutionCounts
+
+					If Settings.ReverseTeamOrder Then
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=0")
+					Else
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=0")
+					End If
+				Next
+
+			Else
+				For i = 1 to PluginSettings.MaxSubstitutionCounts
+
+					If Settings.ReverseTeamOrder Then
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBLEFT" & i & "=0")
+					Else
+						Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBRIGHT" & i & "=0")
+					End If
+				Next
+			End If
+
 		End If
 
-		If subRemaining = 2 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB1=1")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB2=1")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB3=0")
-		End If
-
-		If subRemaining = 1 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB1=1")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB2=0")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB3=0")
-
-		End If
-
-		If subRemaining = 0 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB1=0")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB2=0")
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB3=0")
-		End If
 	End With
 End Sub
 
-Function Get_SubstitutionCount(team) 'Not In Use.  No longer using Game Events Sub counts
-	Dim i 
-    	Dim subCounts
-	Dim subExists
-	
-	subCounts = 0
-	subExists = false
+'Sub Update_SubstitutionCount_Visitors()
+'
+'	Dim i
+'	Dim subRemaining
+'	
+'
+'	'Get_SubstitutionCount_Visitors
+'	
+'
+'	With Plugin
+'		If .VisitorsSubstitutionCount > 3 Then
+'			Exit Sub
+'		End If
+'
+'		subRemaining = .VisitorsSubstitutionCount
+'		
+'		If subRemaining = 3 Then
+'			For i = 1 to 3
+'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB" & i & "=1")
+'			Next
+'		End If
+'
+'		If subRemaining = 2 Then
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB1=1")
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB2=1")
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB3=0")
+'		End If
+'
+'		If subRemaining = 1 Then
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB1=1")
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB2=0")
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB3=0")
+'
+'		End If
+'
+'		If subRemaining = 0 Then
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB1=0")
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB2=0")
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET HOME_SUB3=0")
+'		End If
+'	End With
+'End Sub
+'
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Not In Use.  No longer using Game Events Sub counts
+'''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Function Get_SubstitutionCount(team) 
+'	Dim i 
+'    	Dim subCounts
+'	Dim subExists
+'	
+'	subCounts = 0
+'	subExists = false
+'
+'	For i = 1 To Game.GameEvents.Count
+'        	
+'		With Game.GameEvents(i)
+'			If .EventType = 3 Then 'substitution
+'				If .TeamCode = team Then '0:Home  1:Vis
+'					subCounts = subCounts + 1
+'					subExists = True
+'				End If
+'			End If
+'        	End With
+'    	Next
+'
+'	Get_SubstitutionCount = subCounts
+'
+'End Function
 
-	For i = 1 To Game.GameEvents.Count
-        	
-		With Game.GameEvents(i)
-			If .EventType = 3 Then 'substitution
-				If .TeamCode = team Then '0:Home  1:Vis
-					subCounts = subCounts + 1
-					subExists = True
-				End If
-			End If
-        	End With
-    	Next
+Sub Set_SubstitutionChip()
+	If Plugin.SubChipsState Then
+		Insert_SubstitutionChip
+	Else
+		Retract_SubstitutionChip
+	End If
+End Sub
+Sub Insert_SubstitutionChip()
+	'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBS=ON")
+	Viz_Update "SUBS", "ON"
+End Sub
 
-	Get_SubstitutionCount = subCounts
-
-End Function
+Sub Retract_SubstitutionChip()
+	'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET SUBS=OFF")
+	Viz_Update "SUBS", "OFF"
+End Sub
 
 '=====================================================================
 '	SPONSORS	
