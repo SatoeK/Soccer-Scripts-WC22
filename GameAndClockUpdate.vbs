@@ -177,6 +177,7 @@ Sub Game_Update()
 
 		If Game.Final Then
 			Plugin.GoTo_FoxBox_State
+			Plugin.UnCheckSubstitutionCountsState
 
 			Viz_Update_OutputDirect "FINAL", "ON"
 		Else
