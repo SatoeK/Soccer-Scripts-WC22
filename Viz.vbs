@@ -104,7 +104,12 @@ Sub VizSecondary_Send(p_sCommand)
 	
 	If  RendererSecondarySocket.Connected Then
 		Log.LogEvent  p_sCommand, "Viz", 0, "VizSecondary_Send"
-		RendererSecondarySocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+		'
+		If InStr(1, p_sCommand, "™", 0) > 0 Then
+			'Interface.Viz_FoxBoxRendererSecondarySocket(p_sCommand)
+		Else
+			RendererSecondarySocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+		End If
 	End If
 
 End Sub
