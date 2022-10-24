@@ -21,7 +21,7 @@ Sub Viz_Send(p_sCommand)
 		Log.LogEvent  p_sCommand, "Viz", 0, "Renderer"
 		
 		If InStr(1, p_sCommand, "™", 0) > 0 Then
-			Interface.Viz_FoxBoxSend(p_sCommand)
+			Interface.Viz_FoxBoxRendererSocket_Send(p_sCommand)
 		Else
 			RendererSocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
 		End If
