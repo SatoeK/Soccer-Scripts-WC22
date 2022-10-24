@@ -19,7 +19,12 @@ Sub Viz_Send(p_sCommand)
 
 	If Plugin.SendToRenderer Then
 		Log.LogEvent  p_sCommand, "Viz", 0, "Renderer"
-		RendererSocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+		
+		If InStr(1, p_sCommand, "™", 0) > 0 Then
+			Interface.Viz_FoxBoxSend(p_sCommand)
+		Else
+			RendererSocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+		End If
 		
 		Call VizSecondary_Send(p_sCommand)
 
@@ -30,6 +35,37 @@ Sub Viz_Send(p_sCommand)
 	End If
 	
 End Sub
+
+Sub TEST2()
+	Viz_SendTest(VizLayer & "*FUNCTION*DataPool*Data SET POPUP_NOTELINE_LIVE=" & HEADER_DOUBLEQUOTES & PluginSettings.FoxBoxHeader & HEADER_DOUBLEQUOTES)
+End Sub
+
+Sub Viz_SendTest(p_sCommand)
+
+	On Error Resume Next
+
+	Dim  stxt
+
+	If Plugin.SendToRenderer Then
+
+		'msgbox InStr(1, stxt, "™", 0)
+		'If InStr(1, p_sCommand, "™", 0) > 0 Then
+		'	Interface.TEST(p_sCommand)
+		'End If
+
+		RendererSocket.Send Interface.ConvertToUTF8(p_sCommand) & Chr(0)
+		
+		Log.LogEvent  p_sCommand, "Viz", 0, "Renderer"
+		'Call VizSecondary_Send(p_sCommand)
+
+	End If
+
+	'If Plugin.SendToPreview Then
+	'	Preview_Send(p_sCommand)
+	'End If
+	
+End Sub
+
 
 '=====================================================================
 '---------------------------------------------------------------------
