@@ -106,7 +106,7 @@ Sub VizSecondary_Send(p_sCommand)
 		Log.LogEvent  p_sCommand, "Viz", 0, "VizSecondary_Send"
 		'
 		If InStr(1, p_sCommand, "™", 0) > 0 Then
-			'Interface.Viz_FoxBoxRendererSecondarySocket(p_sCommand)
+			Plugin.Viz_FoxBoxRendererSecondarySocket_Send(p_sCommand)
 		Else
 			RendererSecondarySocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
 		End If
@@ -120,7 +120,15 @@ End Sub
 'This gets sent to output always
 Sub Viz_Send_OutputDirect(p_sCommand)
 	Log.LogEvent  p_sCommand, "Viz", 0, "Renderer"
-	RendererSocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+
+	If InStr(1, p_sCommand, "™", 0) > 0 Then
+		Interface.Viz_FoxBoxRendererSocket_Send(p_sCommand)
+	Else
+		RendererSocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+	End If
+	
+	'RendererSocket.Send ConvertToUTF8(p_sCommand) & Chr(0)
+
 
 	Call VizSecondary_Send(p_sCommand)
 End Sub
@@ -155,7 +163,12 @@ Sub Preview_Send(p_sCommand)
 
 	If PreviewSocket.Connected Then
 		Log.LogEvent  p_sCommand, "Viz", 0, "Preview_Send"
-		PreviewSocket.Send  ConvertToUTF8(p_sCommand) & Chr(0)
+
+		If InStr(1, p_sCommand, "™", 0) > 0 Then
+			Plugin.Viz_FoxBoxPreviewSocket_Send(p_sCommand)
+		Else
+			PreviewSocket.Send  ConvertToUTF8(p_sCommand) & Chr(0)
+		End If
 	End If
 End Sub
 
