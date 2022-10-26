@@ -59,6 +59,8 @@ Dim ogText
 
 Dim FootnoteInsertionState
 
+Const FOXBOX_FOXBOX = 2
+Const FOXBOX_OUTOFTOWNSCORE = 22
 
 '=====================================================================
 '	FOX BOX
@@ -82,6 +84,18 @@ Sub FoxBox_GoToState(p_sStateName)
 	Game_Update
 
     	Log.LogEvent "FoxBox: go to " & p_sStateName, "Debug", 0, "Renderer"
+
+	If p_sStateName = "OutOfTownScore" Then
+		If FoxBox.State <> FOXBOX_FOXBOX Then
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=OFF")
+			Delay .3
+		End If
+	Else
+		If FoxBox.State = FOXBOX_OUTOFTOWNSCORE Then 
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=OFF")
+			Delay .3
+		End If
+	End If
 
 	Select Case p_sStateName
 	
