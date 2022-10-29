@@ -2282,61 +2282,6 @@ Sub Insert_Commentators()
 	UpdateCommentators
 End Sub
 
-'=====================================================================
-'	Commentators	
-'---------------------------------------------------------------------
-'Sub UpdateCommentators_RegularFoxBox()
-'	
-'	Dim i
-'
-'	ClearCommentators
-'
-'	Viz_Update "COMMENTATORS/HEADER_LOAD", "Commentators"
-'	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET FOCUS_LOAD=2")
-'
-'	Dim com1, com2, com3
-'	Dim result
-'	
-'	com1 = Trim(Settings.Commentators(1).FirstName) '& chr(32) & Trim(Settings.Commentators(1).LastName)
-'	com2 = Trim(Settings.Commentators(2).FirstName) '& chr(32) & Trim(Settings.Commentators(2).LastName)
-'	com3 = Trim(Settings.Commentators(3).FirstName) '& chr(32) & Trim(Settings.Commentators(3).LastName)
-'	com4 = Trim(Settings.Commentators(4).FirstName) '& chr(32) & Trim(Settings.Commentators(4).LastName) 
-'	
-'	
-'	'Checking First Name exists
-'	If Len(com1) > 0 Then
-'		Viz_Update "COMMENTATORS/NAME1_LOAD", HEADER_DOUBLEQUOTES & com1 & chr(32) & Trim(Settings.Commentators(1).LastName)
-'		
-'		'There is only 1 commentator
-'		If Len(com2) < 1 Then
-'			Viz_Update "COMMENTATORS/NAME1_LOAD", ""
-'			Viz_Update "COMMENTATORS/NAME2_LOAD", HEADER_DOUBLEQUOTES & com1 & chr(32) & Trim(Settings.Commentators(1).LastName)
-'		End If
-'	end if
-'
-'	If Len(com2) > 0  Then
-'		Viz_Update "COMMENTATORS/NAME2_LOAD", HEADER_DOUBLEQUOTES & com2 & chr(32) & Trim(Settings.Commentators(2).LastName) 	
-'	end If
-'	
-'	If Len(com3) > 0 Then
-'		Viz_Update "COMMENTATORS/NAME3_LOAD", HEADER_DOUBLEQUOTES & com3 & chr(32) & Trim(Settings.Commentators(3).LastName) 
-'	End If
-'		
-'	Insert_Commentators
-'
-'	If Len(com4) > 0 Then
-'		result = MsgBox("There is One More Commentator.  Move Next?", vbYesNo)
-'
-'		If result = vbYes Then
-'			AdvanceCommentators
-'		Else
-'			Exit Sub
-'		End If
-'	End If
-'	
-'
-'End Sub
-
 'this needs to clean up
 Sub UpdateCommentators()
 
@@ -2354,27 +2299,15 @@ Sub UpdateCommentators()
 	com2 = Trim(Settings.Commentators(2).FirstName) '& chr(32) & Trim(Settings.Commentators(2).LastName)
 	com3 = Trim(Settings.Commentators(3).FirstName) '& chr(32) & Trim(Settings.Commentators(3).LastName)
 	com4 = Trim(Settings.Commentators(4).FirstName) '& chr(32) & Trim(Settings.Commentators(4).LastName
-
-
-	'Header Bold
-	'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET LINE1BOLD_LOAD=1") 'bolding line 1
 	
 	If Len(com1) > 0 Then
 		If Len(com2) > 0 Then
-			'at least 2 commentators
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT1_LOAD=" & commentator_header)
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT2_LOAD=" & HEADER_DOUBLEQUOTES & com1 & chr(32) & Trim(Settings.Commentators(1).LastName))
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT3_LOAD=" & HEADER_DOUBLEQUOTES & com2 & chr(32) & Trim(Settings.Commentators(2).LastName))
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=TRIPLE")
 
 			Call Set_TripleLineNote(commentator_header, com1 & chr(32) & Trim(Settings.Commentators(1).LastName), com2 & chr(32) & Trim(Settings.Commentators(2).LastName), IsLine1Bold)
 			Insert_TripleLineNote
 
 		Else
 			'One commentator
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DOUBLE/TEXT1_LOAD=" & commentator_header)
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DOUBLE/TEXT2_LOAD=" & HEADER_DOUBLEQUOTES & com1 & chr(32) & Trim(Settings.Commentators(1).LastName))
-			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=DOUBLE")
 			commentator_header = "COMMENTATOR"
 			
 			Call Set_DoubleLineNote(commentator_header, com1 & chr(32) & Trim(Settings.Commentators(1).LastName), IsLine1Bold)
@@ -2390,19 +2323,11 @@ Sub UpdateCommentators()
 		If result = vbYes Then
 			If Len(com4) > 0 Then
 			
-				'at least 2 commentators
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT1_LOAD=" & commentator_header)
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT2_LOAD=" & HEADER_DOUBLEQUOTES & com3 & chr(32) & Trim(Settings.Commentators(3).LastName))
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT3_LOAD=" & HEADER_DOUBLEQUOTES & com4 & chr(32) & Trim(Settings.Commentators(4).LastName))
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=TRIPLE")
 
 				Call Set_TripleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), com4 & chr(32) & Trim(Settings.Commentators(4).LastName), IsLine1Bold)
 				Insert_TripleLineNote
 			Else
 				'One commentator
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DOUBLE/TEXT1_LOAD=" & commentator_header)
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DOUBLE/TEXT2_LOAD=" & HEADER_DOUBLEQUOTES & com3 & chr(32) & Trim(Settings.Commentators(3).LastName))
-				'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=DOUBLE")
 				
 				Call Set_DoubleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), IsLine1Bold)
 				Insert_DoubleLineNote
@@ -2532,55 +2457,46 @@ Sub UpdateCommentatorsWithHead_BackupInProgress()
 
 	End With
 End Sub
+'=====================================================================
+'	Multiple Talents Template	
+'---------------------------------------------------------------------
+Sub UpdateMultipleCommentatorsWithHead()
+	Dim i 
+	dim result
+	Dim numCol
 
+	numCol = 0
 
-'Sub UpdateCommentatorsWithHeadshots()
-'	Dim i
-'	Dim countCommentators
-'	Dim objFileSystem
-'	Dim sFileName
-'
-'	countCommentators = 0
-'
-'	' Create FileSystem Object
-'	Set objFileSystem = CreateObject("Scripting.FileSystemObject")
-'
-'	' Get Headshot Folder
-'	sFileName = COMMON_DIRECTORY & "Elements\Headshots\"
-'
-'	Set objFolder = objFileSystem.GetFolder(sFileName)
-'                  
-'	If objFolder Is Nothing Then
-'		Log.LogEvent "Headshot folder '" & sFileName & "' doesn't exist.", "Debug", 0, "Renderer"    
-'	End If
-'
-'
-'	For i = 1 to 4
-'		If  Len(Settings.Commentators(i).FirstName) > 0 Then
-'			Ventuz_Update ".Dropdown.Talent.Item" & i & ".Name1", Trim(Settings.Commentators(i).FirstName)
-'			Ventuz_Update ".Dropdown.Talent.Item" & i & ".Name2", Trim(Settings.Commentators(i).LastName)
-'			countCommentators = countCommentators + 1
-'		End If
-'		
-'
-'		'Settignb headshots
-'                If Not objFolder Is Nothing Then
-'			sFileName = objFolder.Path & "\" & Settings.Commentators(i).FirstName & " " & Settings.Commentators(i).LastName & ".png"
-'
-'			If objFileSystem.FileExists(sFileName) Then
-'				Ventuz_Update ".Dropdown.Talent.Item" & i & ".ImagePath", sFileName
-'			End If
-'		End If
-'	Next
-'
-'
-'	If countCommentators > 3 then
-'		countCommentators = 3
-'	End If
-'
-'	Ventuz_Update ".Dropdown.Talent.Count", countCommentators
-'
-'End Sub
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT1_LOAD=" & "HELLO!")
+
+	With PluginSettings
+
+	For i = 1 to 4
+
+		If Len(Trim(.Commentators(i).FirstName)) > 0 Then
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i) & "_LOAD=" & .Commentators(i).FirstName)
+			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i)+1 & "_LOAD=" & .Commentators(i).LastName)
+			
+			If i = 1 then
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE_LOAD=1")
+			Else
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD" & i & "_LOAD=" & .CommentatorsHeadshots(i))
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE" & i & "_LOAD=1")
+			End If
+
+			numcol = numCol + 1
+		Else
+			Exit For
+		End If
+	Next
+
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/SEL_LOAD=" & numCol)
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=COMMENTATORS")
+
+	End With
+End Sub
+
 '=====================================================================
 '	Reporting	
 '---------------------------------------------------------------------
