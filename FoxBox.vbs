@@ -278,7 +278,11 @@ Sub FoxBox_GoToState(p_sStateName)
 			Insert_OTS
 
 			CurrentState = "OutOfTownScore"
+		
+		Case "MultipleTalents"
+			UpdateMultipleCommentatorsWithHead
 
+			CurrentState = "MultipleTalents"
 		Case Else
 
 			CurrentState = "Else"			
@@ -320,7 +324,7 @@ Sub FoxBox_GoToFoxBox()
 	Plugin.PreviousState = CurrentState
 
 	Select Case CurrentState
-		Case "GameNote", "GoalMinutes", "TeamNote", "Card", "Substitution", "TeamComparison", "Shootout", "PossessionChart", "Commentators", "Locator", "JerseyColors", "BillboardSponsor", "Reporting", "VoiceOf", "Standings", "PlayerNote", "Summary", "TalentsHead", "OutOfTownScore"
+		Case "GameNote", "GoalMinutes", "TeamNote", "Card", "Substitution", "TeamComparison", "Shootout", "PossessionChart", "Commentators", "Locator", "JerseyColors", "BillboardSponsor", "Reporting", "VoiceOf", "Standings", "PlayerNote", "Summary", "TalentsHead", "OutOfTownScore", "MultipleTalents"
 
 			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=OFF")
 
@@ -606,109 +610,6 @@ Sub Set_PlayerTemplate_LIVE(playerName, playerJersey, playerMintuesText, playerT
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/TRICODE_DISPLAY_LIVE=" & HEADER_DOUBLEQUOTES & playerTeamName & HEADER_DOUBLEQUOTES)
 End Sub
 
-
-
-'Function FormatgoalMinutes_ORG(goalMin)
-'	Dim tmpMins
-'
-'	If (goalMin >= 45) And (goalMin < 90) Then
-'
-'		If (goalMin - 45) = 0 Then
-'			FormatgoalMinutes =  "45+" & Chr(39) 
-'		Else
-'			
-'			tmpMins =  "45'+" & Cstr(goalMin - 45) '& Chr(39) 
-'
-'			If (goalMin - 45) > 9 Then '9 is arbitary
-'				
-'				result = MsgBox (tmpMins & "?", vbYesNo, "Yes No Example")	
-'
-'				Select Case result
-'					Case vbYes
-'						FormatgoalMinutes = tmpMins 
-'					Case vbNo
-'						FormatgoalMinutes = "" 
-'				End Select
-'			Else
-'				FormatgoalMinutes = tmpMins 
-'			End If
-'
-'		End If
-'
-'	End If 
-'	
-'	If (goalMin >= 90) And (goalMin < 105) Then
-'
-'		If (goalMin - 90) = 0 Then
-'			FormatgoalMinutes =  "90+" & Chr(39) 
-'		Else
-'			tmpMins =  "90'+" & Cstr(goalMin - 90) '& Chr(39) 
-'
-'			If (goalMin - 90) > 9 Then '9 is arbitary
-'				
-'				result = MsgBox (tmpMins & "?", vbYesNo, "Yes No Example")	
-'
-'				Select Case result
-'					Case vbYes
-'						FormatgoalMinutes = tmpMins 
-'					Case vbNo
-'						FormatgoalMinutes = "" 
-'				End Select
-'			Else
-'				FormatgoalMinutes = tmpMins 
-'			End If
-'			
-'		End If
-'	End If
-'	
-'	If (goalMin >= 105) And (goalMin < 120) Then
-'
-'		If (goalMin - 105) = 0 Then
-'			FormatgoalMinutes =  "105+" & Chr(39) 
-'		Else
-'			tmpMins =  "105'+" & Cstr(goalMin - 105) '& Chr(39) 
-'
-'			If (goalMin - 105) > 9 Then '9 is arbitary
-'				
-'				result = MsgBox (tmpMins & "?", vbYesNo, "Yes No Example")	
-'
-'				Select Case result
-'					Case vbYes
-'						FormatgoalMinutes = tmpMins 
-'					Case vbNo
-'						FormatgoalMinutes = "" 
-'				End Select
-'			Else
-'				FormatgoalMinutes = tmpMins 
-'			End If
-'
-'
-'		End If
-'	End If
-'	
-'	If (goalMin >= 120) Then
-'		If (goalMin - 120) = 0 Then
-'			FormatgoalMinutes =  "120+" & Chr(39) 
-'		Else
-'			
-'			tmpMins =  "120'+" & Cstr(goalMin - 120) '& Chr(39) 
-'
-'			If (goalMin - 120) > 9 Then '9 is arbitary
-'				
-'				result = MsgBox (tmpMins & "?", vbYesNo, "Yes No Example")	
-'
-'				Select Case result
-'					Case vbYes
-'						FormatgoalMinutes = tmpMins 
-'					Case vbNo
-'						FormatgoalMinutes = "" 
-'				End Select
-'			Else
-'				FormatgoalMinutes = tmpMins 
-'			End If
-'		end If
-'	End If
-'End Function
 
 '=====================================================================
 '	Yellow/Red Card	
@@ -1008,64 +909,6 @@ Sub Insert_Standings()
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=STANDINGS")
 End Sub
 
-'Sub Update_Standings()
-'
-'	Dim objStanding
-'	Dim standingTitle
-'	Dim standingTitleHeader
-'	Dim GDSighn
-'	Dim goalsFor
-'
-'	GDSighn = ""
-'
-'	groupTitle = HEADER_DOUBLEQUOTES & Plugin.StandingGroupTitle & HEADER_DOUBLEQUOTES
-'
-'	Set objStanding = Soccer.Standings.GetStandingsByName(Plugin.StandingGroupSelected)
-'
-'	Dim objTeam 
-'	Dim i
-'	Dim title, gamesPlayed, teamPoints, goalDifferential
-'
-'	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/HEADER_LOAD=" & groupTitle)
-'	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/CAT2_LOAD=GD")
-'	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/CAT1_LOAD=PTS")
-'
-'	If Plugin.StandingsThressStats Then
-'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/CAT3_LOAD=GF")
-'	Else
-'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/CAT3_LOAD=")
-'	End If
-'
-'	With Soccer.Standings.Teams
-'		For i = 1 to 4
-'			'title = .Team(objStanding.Team(i)).DisplayAbbreviation
-'			title = .Team(objStanding.Team(i)).Name
-'			'gamesPlayed = .Team(objStanding.Team(i)).GamesPlayed 
-'			teamPoints = .Team(objStanding.Team(i)).Points
-'			goalDifferential = .Team(objStanding.Team(i)).GoalDifferential
-'			
-'			If Plugin.StandingsThressStats Then
-'				goalsFor = .Team(objStanding.Team(i)).Goals
-'			Else
-'				goalsFor = ""
-'			End If
-''
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/R" & i & "T_LOAD=" & title)
-'			
-'
-'			If goalDifferential > 0 Then
-'				GDSighn = "+"
-'			Else
-'				GDSighn = ""
-'			End If
-'
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/R" & i & "S2_LOAD=" & GDSighn & goalDifferential )
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/R" & i & "S1_LOAD=" & teamPoints )
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET STANDINGS/R" & i & "S3_LOAD=" & goalsFor )
-'		Next
-'	End With
-'
-'End Sub
 
 Sub Update_StandingStatsCount(ThreeStatsOn)
 	Plugin.StandingsThressStats = ThreeStatsOn
@@ -1214,58 +1057,6 @@ Sub PlayerNote_Change()
 
 End Sub
 
-'Sub Update_PlayerNote_Original()
-'	Dim playerNote
-'	Dim TeamName
-'	Dim teamAbbreviation
-'	Dim tmp
-'	Dim headshotFileName
-'
-'	With Interface.Player
-'		playerNote = .Notes.Selected.Body
-'		TeamName = .Team.DisplayAbbreviation
-'		teamAbbreviation = .Team.Abbreviation
-'
-'		msgbox playerNote
-'		
-'		'TRI_LASTNAME_FIRSTNAME_960
-'		headshotFileName = teamAbbreviation & "_" & .LastName & "_" & .FirstName & "_960" 
-'
-'		tmp = Split(playerNote, "\")
-'
-'		'Player Info
-'		Call Set_PlayerTemplate(.DisplayName, .Jersey, "", TeamName)
-'		
-'		If Plugin.PlayerNoteWithHeadshot Then
-'			'logo 7 head
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=" & teamAbbreviation)
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "/" & headshotFileName)
-'		Else
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LOAD=")
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LOAD=")
-'		End If
-'	
-'		If Ubound(tmp) > 0 Then
-'			'2 line notes
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LOAD=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES)
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LOAD=" & HEADER_DOUBLEQUOTES & tmp(1) & HEADER_DOUBLEQUOTES)
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES_NOTE2")
-'		Else
-'			'l line note
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LOAD=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES)
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LOAD=")
-'
-'			If Plugin.PlayerNoteWithHeadshot Then
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES_NOTE2")
-'			Else
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES_NOTE")
-'			End If
-'		End If
-'
-'	End With 
-'End Sub
-
-
 Sub Update_PlayerNote()
 	Dim objplayerNote
 	Dim TeamName
@@ -1347,82 +1138,6 @@ Sub Update_PlayerNote()
 	End With 
 End Sub
 
-'Sub UpdatePlayerNote_Next()
-'	Dim objplayerNote
-'	Dim TeamName
-'	Dim teamAbbreviation
-'	Dim tmp
-'	Dim headshotFileName
-'
-'	If Interface.Player Is Nothing Then
-'		Exit Sub
-'	End If
-'
-'	With Interface.Player
-'		TeamName = .Team.DisplayAbbreviation
-'		teamAbbreviation = .Team.Abbreviation
-'		
-'		'TRI_LASTNAME_FIRSTNAME_960
-'		headshotFileName = teamAbbreviation & "_" & .LastName & "_" & .FirstName & "_960" 
-'
-'		Set objplayerNote = .Notes.GetNoteByTitle(Plugin.PlayerNoteSelected)
-'		
-'		If objplayerNote Is Nothing  Then
-'			Exit Sub	
-'		End If
-'
-'		tmp = Split(objplayerNote.Body, "\")
-'
-'		Call Set_PlayerTemplate_LIVE(.DisplayName, .Jersey, "", TeamName)
-'		
-'		If Plugin.PlayerNoteWithHeadshot Then
-'			'logo 7 head
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LIVE=" & teamAbbreviation)
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LIVE=" & HEADSHOT_DIRECTORY_GH & teamAbbreviation & "/" & headshotFileName)
-'		Else
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERFLAG_LIVE=")
-'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYERHEAD_LIVE=")
-'		End If
-'	
-'		If Ubound(tmp) > 0 Then
-'			'2 line notes
-'			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LIVE=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES)
-'			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LIVE=" & HEADER_DOUBLEQUOTES & tmp(1) & HEADER_DOUBLEQUOTES)
-'			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=PLAYER_GOAL_MINUTES_NOTE2")
-'			
-'			'wiht head it is always 2 line
-'			If Plugin.PlayerNoteWithHeadshot Then
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LIVE=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES)
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LIVE=" & HEADER_DOUBLEQUOTES & tmp(1) & HEADER_DOUBLEQUOTES)
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LIVE=PLAYER_GOAL_MINUTES_NOTE2")
-'			Else
-'				'msgbox "one line no head"
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LIVE=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES)
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LIVE=" & HEADER_DOUBLEQUOTES & tmp(1) & HEADER_DOUBLEQUOTES)
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LIVE=PLAYER_GOAL_MINUTES_NOTE2")
-'			End If
-'
-'			
-'		Else
-'			'l line note
-'			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LIVE=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES) 'this makes it animate
-'			'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LIVE=") '
-'			
-'			If Plugin.PlayerNoteWithHeadshot Then
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LIVE=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES) 'this makes it animate
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LIVE=") '
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LIVE=PLAYER_GOAL_MINUTES_NOTE2")
-'			Else
-'				'msgbox "one line no head"
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE_LIVE=" & HEADER_DOUBLEQUOTES & tmp(0) & HEADER_DOUBLEQUOTES) 'this makes it animate
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET PLAYER_GOAL_MINUTES/NOTE2_LIVE=") '
-'				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LIVE=PLAYER_GOAL_MINUTES_NOTE")
-'			End If
-'		End If
-'
-'	End With 
-'End Sub
-'
 '=====================================================================
 '	DROPDOWN EXTENSIONS
 '---------------------------------------------------------------------
@@ -2467,34 +2182,38 @@ Sub UpdateMultipleCommentatorsWithHead()
 
 	numCol = 0
 
-	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT1_LOAD=" & "HELLO!")
 
 	With PluginSettings
+		
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT1_LOAD=" & .MultipleTalentsHeader)
 
-	For i = 1 to 4
+		For i = 1 to 4
 
-		If Len(Trim(.Commentators(i).FirstName)) > 0 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i) & "_LOAD=" & .Commentators(i).FirstName)
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i)+1 & "_LOAD=" & .Commentators(i).LastName)
-			
-			If i = 1 then
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE_LOAD=1")
+			If Len(Trim(.Commentators(i).FirstName)) > 0 Then
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i) & "_LOAD=" & .Commentators(i).FirstName)
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i)+1 & "_LOAD=" & .Commentators(i).LastName)
+				
+				If i = 1 then
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE_LOAD=1")
+				Else
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD" & i & "_LOAD=" & .CommentatorsHeadshots(i))
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE" & i & "_LOAD=1")
+				End If
+
+				numcol = numCol + 1
 			Else
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD" & i & "_LOAD=" & .CommentatorsHeadshots(i))
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE" & i & "_LOAD=1")
+				Exit For
 			End If
+		Next
+	End With
 
-			numcol = numCol + 1
-		Else
-			Exit For
-		End If
-	Next
+	If numCol = 0 Then
+		Exit Sub
+	End If
 
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/SEL_LOAD=" & numCol)
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=COMMENTATORS")
-
-	End With
 End Sub
 
 '=====================================================================
