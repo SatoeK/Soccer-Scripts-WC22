@@ -2843,11 +2843,11 @@ End Sub
 Dim roundMove  'to identify when to move to next 10
 Dim ShootoutCurrentRound
 
-'Not Good way to do this but this is available
-Sub Viz_Reset_PenaltyKicks()
-	ResetShootout
-	Plugin.ResetShootoutGraphic
-End Sub
+''Not Good way to do this but this is available
+'Sub Viz_Reset_PenaltyKicks()
+'	ResetShootout
+'	Plugin.ResetShootoutGraphic 'this removes foxbox
+'End Sub
 
 
 Sub Shootout_Update() 'This gets called from frmMain
@@ -2879,6 +2879,24 @@ Sub Initialize_ShootoutScore()
 	
 	'this variable is used to move next
 	ShootoutCurrentRound = Game.ShootoutRound
+End Sub
+
+Sub ShootoutReset() 'need to be call only whenf from reset
+
+	For i = 1 to 5 	
+		Viz_Update "PENALTY_KICKS/T1/ROUND" & i, 0
+		Viz_Update "PENALTY_KICKS/T2/ROUND" & i, 0
+		Delay .2
+	Next
+
+	If Game.ShootoutRound > 5 Then
+		For i = 1 to (5 - (Game.ShootoutRound mod 5) )
+		RefreshPenalty
+		Delay .2
+		Next
+	End If
+
+	
 End Sub
 
 Sub UpdateShootoutOrder()
