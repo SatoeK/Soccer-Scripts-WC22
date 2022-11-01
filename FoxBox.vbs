@@ -2372,21 +2372,9 @@ Sub UpdateVoiceOf()
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET LINE1BOLD_LOAD=1")
 
 	If Trim(Settings.VoiceOfNote) <> "" Then
-		
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT1_LOAD=" & voiceOfTitle)
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT2_LOAD=" & HEADER_DOUBLEQUOTES & voiceOfFullName)
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TRIPLE/TEXT3_LOAD=" & HEADER_DOUBLEQUOTES & Settings.VoiceOfNote)
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=TRIPLE")	
-
 		Call Set_TripleLineNote(voiceOfTitle, voiceOfFullName, Settings.VoiceOfNote, IsLine1Bold)
 		Insert_TripleLineNote
 	Else
-		
-
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DOUBLE/TEXT1_LOAD=" & HEADER_DOUBLEQUOTES & voiceOfTitle)
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DOUBLE/TEXT2_LOAD=" & HEADER_DOUBLEQUOTES & voiceOfFullName)
-		'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=DOUBLE")
-
 		Call Set_DoubleLineNote(voiceOfTitle, voiceOfFullName, IsLine1Bold)
 		Insert_DoubleLineNote
 	End If
