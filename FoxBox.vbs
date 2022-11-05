@@ -21,6 +21,7 @@ Const AGG_TEXT = "AGG"
 Const AGG_TEXT_SPANISH = "GBI"
 Const GOAL_TEXT = "GOAL"
 Const GOAL_TEXT_SPANISH = "GOL"
+Const ANTHEM_PREFIX = "MWCUP22_NATIONAL_ANTHEMS-"
 
 Const STOPPAGETIME = 0
 Const EXTRATIME = 1
@@ -3290,15 +3291,19 @@ End Sub
 
 Sub UpdateNationalAnThemFlag()
 	Dim teamAbb
+	Dim anthName
+
 	
 	If PluginSettings.NationalAnthemSelectedTeam = 0 Then
 		teamAbb = Game.Visitors.Abbreviation
+		'anthName = ANTHEM_PREFIX & Game.Visitors.Name & "_L3"
 	Else
 		teamAbb = Game.Home.Abbreviation
+		'anthName = ANTHEM_PREFIX & Game.Home.Name & "_L3"
 	End If
 
-	'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET L3_LOAD=" & teamAbb)	
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET L3_LIVE=" & teamAbb)	
+	'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET L3_LIVE=" & anthName)	
 End Sub
 
 Sub Retract_NationalAnthem()
