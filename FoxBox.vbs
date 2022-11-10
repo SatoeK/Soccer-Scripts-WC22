@@ -2078,44 +2078,78 @@ Sub ClearCommentators()
 End Sub
 
 
+'Sub UpdateCommentatorsWithHead() 'original
+'	Dim i 
+'	dim result
+'
+'	With PluginSettings
+'
+'	For i = 1 to 4
+'
+'		If Len(Trim(.Commentators(i).FirstName)) > 0 Then
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/TEXT1_LOAD=" & .CommentatorsTitles(i))
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/TEXT2_LOAD=" & .Commentators(i).FirstName & " " & .Commentators(i).LastName)
+'			
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
+'
+'			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=TALENT")
+'
+'			If Len(Trim(.Commentators(i+1).FirstName)) > 0 And (i < 4)Then
+'				'result = MsgBox("More Talents.  Move Next?" & vbCRLf & vbCRLf, 52, "Commentator Response") 'vbYesNo = 4 vbInformation = 64 total 68
+'				'result = MsgBox("Hello everyone!",65,"Example")
+'				Plugin.ShowNextButton
+'				
+'				If result = vbYes Then
+'					'contintue
+'				Else
+'					Exit Sub 
+'				End if
+'			Else
+'				Exit for
+'
+'			End If
+'
+'
+'		Else
+'			Exit For
+'		End If
+'	Next
+'	
+'
+'	End With
+'End Sub
+
+
 Sub UpdateCommentatorsWithHead()
 	Dim i 
 	dim result
+	
+	i = Plugin.TalentIndex
 
 	With PluginSettings
-
-	For i = 1 to 4
-
-		If Len(Trim(.Commentators(i).FirstName)) > 0 Then
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/TEXT1_LOAD=" & .CommentatorsTitles(i))
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/TEXT2_LOAD=" & .Commentators(i).FirstName & " " & .Commentators(i).LastName)
-			
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
-
-			Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=TALENT")
-
-			If Len(Trim(.Commentators(i+1).FirstName)) > 0 And (i < 4)Then
-				result = MsgBox("More Talents.  Move Next?", vbYesNo)
-				
-				If result = vbYes Then
-					'contintue
-				Else
-					Exit Sub 
-				End if
-			Else
-				Exit for
-
-			End If
-
-
-		Else
-			Exit For
-		End If
-	Next
-	
-
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/TEXT1_LOAD=" & .CommentatorsTitles(i))
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/TEXT2_LOAD=" & .Commentators(i).FirstName & " " & .Commentators(i).LastName)
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TALENT/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
+		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=TALENT")
 	End With
+
+		'If Len(Trim(.Commentators(i).FirstName)) > 0 Then
+	Plugin.TalentIndex = Plugin.TalentIndex + 1
+
+	If Plugin.TalentIndex > 4 Then
+		Plugin.HideTalentNextButton
+	End If
+
+	If Len(Trim(PluginSettings.Commentators(Plugin.TalentIndex).FirstName)) > 0 Then
+		Plugin.ShowTalentNextButton
+	Else
+		Plugin.HideTalentNextButton
+	End If
+
 End Sub
+
+
+
 
 Sub UpdateCommentatorsWithHead_BackupInProgress()
 	Dim i 
