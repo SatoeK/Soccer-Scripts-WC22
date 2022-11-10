@@ -261,15 +261,15 @@ Sub FoxBox_GoToState(p_sStateName)
 
 		Case "Summary"
 		 	
-			If Plugin.SummarySelected = 0 Then	
-				titleSummary = "SCORING SUMMARY"
-				Call UpdateSummary(Plugin.ScoringSummary, titleSummary)
-				'UpdateScoreSummary
-			Else
-				titleSummary = "MATCH SUMMARY"
-				Call UpdateSummary(Plugin.MatchSummary, titleSummary)
-				'UpdateMatchSummary
-			End If
+		'	If Plugin.SummarySelected = 0 Then	
+		'		titleSummary = "SCORING SUMMARY"
+		'		Call UpdateSummary(Plugin.ScoringSummary, titleSummary)
+		'	Else
+		'		titleSummary = "MATCH SUMMARY"
+		'		Call UpdateSummary(Plugin.MatchSummary, titleSummary)
+		'	End If
+
+			UpdateGameSummary
 
 			CurrentState = "Summary"
 
@@ -3184,6 +3184,135 @@ Function GetGameEvenObjectByID(eventID)
 End Function 
 
 
+'Sub UpdateSummary(summaryArray(), title)
+'	Dim i
+'	Dim iteration
+'	Dim row1ID, row2ID
+'	Dim result
+'	Dim objGEHelper
+'	Dim goalText
+'	Dim minuteText
+'
+'	Dim row1flag, row2Flag
+'	
+'	On Error Resume Next
+'
+'	If  summaryArray.Count < 1 Then
+'		Exit Sub
+'	End If
+'
+'
+'	iteration =  summaryArray.Count\2 
+'	
+'	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GAMESUMMARY/TEXT1_LOAD=" & title)
+'
+'	If summaryArray.Count = 1 Then 'this case iteration is 0
+'		row1ID = summaryArray.Item(1)
+'		
+'		With GetGameEvenObjectByID(row1ID)
+'			goalText =  GetGoalText(row1ID) 
+'			row1flag = .Team.Abbreviation
+'			
+'			If .EventType = 4 Then
+'				'opponent
+'				row1flag = GetOpponentAbbreviation(row1flag)
+'			End If
+'			'
+'			minuteText = FormatGoalMinutes(GetGameEvenObjectByID(row1ID))
+'
+'			Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText, minuteText , Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
+'		End With
+'
+'		Call SetSummaryRowTwo("BLANKALPHA", "", "", "")
+'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
+'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYSINGLE")
+'	End If
+'	
+'	For i = 1 to iteration
+'		
+'		row1ID = summaryArray.Item(2*i-1)
+'		row2ID = summaryArray.Item(2*i)
+'
+'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GAMESUMMARY/TEXT1_LOAD=" & title)
+'
+'		'row1		
+'		With GetGameEvenObjectByID(row1ID)
+'			goalText =  GetGoalText(row1ID) 
+'			row1flag = .Team.Abbreviation
+'			
+'			If .EventType = 4 Then
+'				'opponent flag
+'				row1flag = GetOpponentAbbreviation(row1flag)
+'			End If
+'
+'			Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText, FormatGoalMinutes(GetGameEvenObjectByID(row1ID)) , Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
+'		
+'		End With
+'		'row2
+'		With GetGameEvenObjectByID(row2ID)
+'			goalText =  GetGoalText(row2ID) 
+'			row2flag = .Team.Abbreviation
+'			
+'			If .EventType = 4 Then
+'				'opponent flag
+'				row2flag = GetOpponentAbbreviation(row2flag)
+'			End If
+'			'
+'			Call SetSummaryRowTwo(row2flag, .Player1.DisplayName & goalText, FormatGoalMinutes(GetGameEvenObjectByID(row2ID)), Plugin.GameEventHeperObjectByEventID(row2ID).EventAdditonalInfo)
+'		End With
+'		
+'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
+'		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYDOUBLE")
+'		
+'		if (2*i+1) <= summaryArray.Count Then
+'
+'			result = MsgBox("More " & title &  " Move Next?", vbYesNo)
+'		
+'			If result = vbYes Then
+'				
+'				If (2*i+1) = summaryArray.Count Then
+'					'Msgbox "index: " & 2*i+1 & "ID: " & row1ID
+'					
+'					row1ID = summaryArray.Item(2*i+1)
+'
+'					'row1		
+'					With GetGameEvenObjectByID(row1ID)
+'						
+'						goalText =  GetGoalText(row1ID) 
+'						row1flag = .Team.Abbreviation
+'
+'						If .EventType = 4 Then
+'							'opponent flag
+'							row1flag = GetOpponentAbbreviation(row1flag)
+'						End If
+'
+'
+'						Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText , FormatGoalMinutes(GetGameEvenObjectByID(row1ID)), Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
+'					End With
+'
+'					Call SetSummaryRowTwo("BLANKALPHA", "", "", "")
+'					
+'					'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
+'					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYSINGLE")
+'				End If
+'			Else
+'				Exit Sub
+'			End If
+'		End If
+'	Next
+'End Sub
+
+Sub UpdateGameSummary()
+	If Plugin.SummarySelected = 0 Then	
+		titleSummary = "SCORING SUMMARY"
+		Call UpdateSummary(Plugin.ScoringSummary, titleSummary)
+	Else
+		titleSummary = "MATCH SUMMARY"
+		Call UpdateSummary(Plugin.MatchSummary, titleSummary)
+	End If
+End Sub
+
+
 Sub UpdateSummary(summaryArray(), title)
 	Dim i
 	Dim iteration
@@ -3201,105 +3330,85 @@ Sub UpdateSummary(summaryArray(), title)
 		Exit Sub
 	End If
 
-
 	iteration =  summaryArray.Count\2 
 	
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GAMESUMMARY/TEXT1_LOAD=" & title)
 
-	If summaryArray.Count = 1 Then 'this case iteration is 0
-		row1ID = summaryArray.Item(1)
-		
-		With GetGameEvenObjectByID(row1ID)
-			goalText =  GetGoalText(row1ID) 
-			row1flag = .Team.Abbreviation
-			
-			If .EventType = 4 Then
-				'opponent
-				row1flag = GetOpponentAbbreviation(row1flag)
-			End If
-			'
-			minuteText = FormatGoalMinutes(GetGameEvenObjectByID(row1ID))
-
-			Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText, minuteText , Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
-		End With
-
-		Call SetSummaryRowTwo("BLANKALPHA", "", "", "")
-		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
-		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYSINGLE")
-	End If
+	i = Plugin.SummaryIndex
 	
-	For i = 1 to iteration
-		
+	If (2*i-1) = summaryArray.Count Then
+		row1ID = summaryArray.Item(summaryArray.Count)
+		Call SetSingleGameSummary(row1ID)
+	Else
 		row1ID = summaryArray.Item(2*i-1)
 		row2ID = summaryArray.Item(2*i)
 
 		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GAMESUMMARY/TEXT1_LOAD=" & title)
 
-		'row1		
-		With GetGameEvenObjectByID(row1ID)
-			goalText =  GetGoalText(row1ID) 
-			row1flag = .Team.Abbreviation
-			
-			If .EventType = 4 Then
-				'opponent flag
-				row1flag = GetOpponentAbbreviation(row1flag)
-			End If
+		Call SetDoubleGameSummary(row1ID, row2ID)
+	End If
 
-			Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText, FormatGoalMinutes(GetGameEvenObjectByID(row1ID)) , Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
+	if (2*i+1) <= summaryArray.Count Then
+		Plugin.ShowGameSummaryNextButton
+	Else
+		Plugin.HideGameSummaryNextButton
+	End If
+
+	Plugin.SummaryIndex =  Plugin.SummaryIndex + 1
+	
+End Sub
+
+Sub SetSingleGameSummary(row1ID)
+	With GetGameEvenObjectByID(row1ID)
+		goalText =  GetGoalText(row1ID) 
+		row1flag = .Team.Abbreviation
 		
-		End With
-		'row2
-		With GetGameEvenObjectByID(row2ID)
-			goalText =  GetGoalText(row2ID) 
-			row2flag = .Team.Abbreviation
-			
-			If .EventType = 4 Then
-				'opponent flag
-				row2flag = GetOpponentAbbreviation(row2flag)
-			End If
-			'
-			Call SetSummaryRowTwo(row2flag, .Player1.DisplayName & goalText, FormatGoalMinutes(GetGameEvenObjectByID(row2ID)), Plugin.GameEventHeperObjectByEventID(row2ID).EventAdditonalInfo)
-		End With
-		
-		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
-		Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYDOUBLE")
-		
-		if (2*i+1) <= summaryArray.Count Then
-
-			result = MsgBox("More " & title &  " Move Next?", vbYesNo)
-		
-			If result = vbYes Then
-				
-				If (2*i+1) = summaryArray.Count Then
-					'Msgbox "index: " & 2*i+1 & "ID: " & row1ID
-					
-					row1ID = summaryArray.Item(2*i+1)
-
-					'row1		
-					With GetGameEvenObjectByID(row1ID)
-						
-						goalText =  GetGoalText(row1ID) 
-						row1flag = .Team.Abbreviation
-
-						If .EventType = 4 Then
-							'opponent flag
-							row1flag = GetOpponentAbbreviation(row1flag)
-						End If
-
-
-						Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText , FormatGoalMinutes(GetGameEvenObjectByID(row1ID)), Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
-					End With
-
-					Call SetSummaryRowTwo("BLANKALPHA", "", "", "")
-					
-					'Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
-					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYSINGLE")
-				End If
-			Else
-				Exit Sub
-			End If
+		If .EventType = 4 Then
+			'opponent
+			row1flag = GetOpponentAbbreviation(row1flag)
 		End If
-	Next
+		'
+		minuteText = FormatGoalMinutes(GetGameEvenObjectByID(row1ID))
+
+		Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText, minuteText , Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
+	End With
+
+	Call SetSummaryRowTwo("BLANKALPHA", "", "", "")
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYSINGLE")
+
+End Sub
+
+Sub SetDoubleGameSummary(row1ID, row2ID)
+	'row1		
+	With GetGameEvenObjectByID(row1ID)
+		goalText =  GetGoalText(row1ID) 
+		row1flag = .Team.Abbreviation
+		
+		If .EventType = 4 Then
+			'opponent flag
+			row1flag = GetOpponentAbbreviation(row1flag)
+		End If
+
+		Call SetSummaryRowOne(row1flag, .Player1.DisplayName & goalText, FormatGoalMinutes(GetGameEvenObjectByID(row1ID)) , Plugin.GameEventHeperObjectByEventID(row1ID).EventAdditonalInfo)
+	
+	End With
+	'row2
+	With GetGameEvenObjectByID(row2ID)
+		goalText =  GetGoalText(row2ID) 
+		row2flag = .Team.Abbreviation
+		
+		If .EventType = 4 Then
+			'opponent flag
+			row2flag = GetOpponentAbbreviation(row2flag)
+		End If
+		'
+		Call SetSummaryRowTwo(row2flag, .Player1.DisplayName & goalText, FormatGoalMinutes(GetGameEvenObjectByID(row2ID)), Plugin.GameEventHeperObjectByEventID(row2ID).EventAdditonalInfo)
+	End With
+	
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET GLOW=ON")
+	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET DROPDOWN_DISPATCH_LOAD=GAMESUMMARYDOUBLE")
+
 End Sub
 
 Function GetOpponentAbbreviation(teamAbb)
