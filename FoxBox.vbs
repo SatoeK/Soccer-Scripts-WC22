@@ -1999,6 +1999,62 @@ Sub Insert_Commentators()
 End Sub
 
 'this needs to clean up
+'Sub UpdateCommentators()
+'
+'	
+'	Dim com1, com2, com3
+'	Dim result
+'	Dim commentator_header
+'	Dim IsLine1Bold
+'
+'
+'	IsLine1Bold = 1
+'	commentator_header = "COMMENTATORS"
+'	
+'	com1 = Trim(Settings.Commentators(1).FirstName) '& chr(32) & Trim(Settings.Commentators(1).LastName)
+'	com2 = Trim(Settings.Commentators(2).FirstName) '& chr(32) & Trim(Settings.Commentators(2).LastName)
+'	com3 = Trim(Settings.Commentators(3).FirstName) '& chr(32) & Trim(Settings.Commentators(3).LastName)
+'	com4 = Trim(Settings.Commentators(4).FirstName) '& chr(32) & Trim(Settings.Commentators(4).LastName
+'	
+'	If Len(com1) > 0 Then
+'		If Len(com2) > 0 Then
+'
+'			Call Set_TripleLineNote(commentator_header, com1 & chr(32) & Trim(Settings.Commentators(1).LastName), com2 & chr(32) & Trim(Settings.Commentators(2).LastName), IsLine1Bold)
+'			Insert_TripleLineNote
+'
+'		Else
+'			'One commentator
+'			commentator_header = "COMMENTATOR"
+'			
+'			Call Set_DoubleLineNote(commentator_header, com1 & chr(32) & Trim(Settings.Commentators(1).LastName), IsLine1Bold)
+'			Insert_DoubleLineNote
+'		End If
+'	End If
+'
+'
+'	If Len(com3) > 0 Then
+'
+'		result = MsgBox("More Commentators.  Move Next?", vbYesNo)
+'		
+'		If result = vbYes Then
+'			If Len(com4) > 0 Then
+'			
+'
+'				Call Set_TripleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), com4 & chr(32) & Trim(Settings.Commentators(4).LastName), IsLine1Bold)
+'				Insert_TripleLineNote
+'			Else
+'				'One commentator
+'				
+'				Call Set_DoubleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), IsLine1Bold)
+'				Insert_DoubleLineNote
+'		End If
+'		
+'		Else 'answer is NO
+'			Exit Sub
+'		End If
+'	End If
+'End Sub
+
 Sub UpdateCommentators()
 
 	
@@ -2014,8 +2070,8 @@ Sub UpdateCommentators()
 	com1 = Trim(Settings.Commentators(1).FirstName) '& chr(32) & Trim(Settings.Commentators(1).LastName)
 	com2 = Trim(Settings.Commentators(2).FirstName) '& chr(32) & Trim(Settings.Commentators(2).LastName)
 	com3 = Trim(Settings.Commentators(3).FirstName) '& chr(32) & Trim(Settings.Commentators(3).LastName)
-	com4 = Trim(Settings.Commentators(4).FirstName) '& chr(32) & Trim(Settings.Commentators(4).LastName
-	
+	'com4 = Trim(Settings.Commentators(4).FirstName) '& chr(32) & Trim(Settings.Commentators(4).LastName
+
 	If Len(com1) > 0 Then
 		If Len(com2) > 0 Then
 
@@ -2033,28 +2089,31 @@ Sub UpdateCommentators()
 
 
 	If Len(com3) > 0 Then
-
-		result = MsgBox("More Commentators.  Move Next?", vbYesNo)
-		
-		If result = vbYes Then
-			If Len(com4) > 0 Then
-			
-
-				Call Set_TripleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), com4 & chr(32) & Trim(Settings.Commentators(4).LastName), IsLine1Bold)
-				Insert_TripleLineNote
-			Else
-				'One commentator
-				
-				Call Set_DoubleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), IsLine1Bold)
-				Insert_DoubleLineNote
-		End If
-		
-		Else 'answer is NO
-			Exit Sub
-		End If
+		Plugin.ShowCommentatorNextButton
 	End If
+
 End Sub
 
+Sub NextCommentators()
+	Dim com3, com4
+	Dim commentator_header
+
+	commentator_header = "COMMENTATORS"
+
+	com3 = Trim(Settings.Commentators(3).FirstName) 
+	com4 = Trim(Settings.Commentators(4).FirstName) 
+
+	If Len(com4) > 0 Then
+		Call Set_TripleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), com4 & chr(32) & Trim(Settings.Commentators(4).LastName), IsLine1Bold)
+		Insert_TripleLineNote
+	Else
+		Call Set_DoubleLineNote(commentator_header, com3 & chr(32) & Trim(Settings.Commentators(3).LastName), IsLine1Bold)
+		Insert_DoubleLineNote
+	End If
+
+	Plugin.HideCommentatorNextButton
+
+End Sub
 
 Sub AdvanceCommentators()
 	Dim com4
