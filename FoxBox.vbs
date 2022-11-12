@@ -1066,12 +1066,17 @@ Sub Update_PlayerNote()
 	Dim headshotFileName
 	Dim selectedTeam
 	Dim headshotExists
+	Dim TrimmedFirstName
 	
 	headshotExists = false
 
 	If Interface.Player Is Nothing Then
 		Exit Sub
 	End If
+
+	set r = New RegExp
+	r.Global = True
+       	r.Pattern = Chr(160) & "[\s\S]*"
 
 	With Interface.Player
 		TeamName = .Team.DisplayAbbreviation
@@ -1083,9 +1088,17 @@ Sub Update_PlayerNote()
 			selectedTeam = 0
 		End If
 
-		'TRI_LASTNAME_FIRSTNAME_960
-		'headshotFileName = teamAbbreviation & "-WOMEN" & "_" & .LastName & "_" & .FirstName & "_960" 
-		headshotFileName = teamAbbreviation & "_" & .LastName & "_" & .FirstName & "_960" 
+		'Dim startChar
+		'startChar = Mid(.FirstName, 1, 1)
+		'msgbox ASC(startChar)
+
+		TrimmedFirstName = r.Replace(.FirstName, "")
+
+		If Len(TrimmedFirstName) > 0 Then
+			headshotFileName = teamAbbreviation & "_" & .LastName & "_" & .FirstName & "_960" 
+		Else
+			headshotFileName = teamAbbreviation & "_" & .LastName & "_960" 'player with a single nick name 
+		End If
 
 		Set objplayerNote = .Notes.GetNoteByTitle(Plugin.PlayerNoteSelected)
 		
