@@ -1482,8 +1482,8 @@ Sub Update_PossessionChart()
 	Set objHomeSplit = Game.Home.Stats.Game.Total
 	Set objVisitorsSplit = Game.Visitors.Stats.Game.Total
 	
-	sHomeStat = objHomeSplit.Possession 
-	sVisitorsStat = objVisitorsSplit.Possession
+	sHomeStat = FormatNumber(objHomeSplit.Possession, 1) 
+	sVisitorsStat = FormatNumber(objVisitorsSplit.Possession, 1)
 
 	Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET TIME_OF_POSSESSION/HEADER_LOAD=POSSESSION")
 
@@ -1718,7 +1718,8 @@ Function TeamStats_GetValue(p_objSplit, p_sStat)
 
     Select Case UCase(p_sStat)
         Case "POSSESSION"
-            sStat = p_objSplit.Possession & "%" '& Chr(60) & "scale value" & Chr(61) & Chr(34) & "0.73" & Chr(34) & Chr(62) & "%" & chr(60) & "/scale" & Chr(62)
+            'sStat = p_objSplit.Possession & "%" '& Chr(60) & "scale value" & Chr(61) & Chr(34) & "0.73" & Chr(34) & Chr(62) & "%" & chr(60) & "/scale" & Chr(62)
+            sStat = FormatNumber(p_objSplit.Possession, 1) & "%" '& Chr(60) & "scale value" & Chr(61) & Chr(34) & "0.73" & Chr(34) & Chr(62) & "%" & chr(60) & "/scale" & Chr(62)
         Case "YELLOW CARDS"
             sStat = p_objSplit.YellowCards
         Case "RED CARDS"
@@ -1729,7 +1730,7 @@ Function TeamStats_GetValue(p_objSplit, p_sStat)
             sStat = p_objSplit.PassesAttempted
         Case "PASS %"
             'sStat = FormatNumber(100 * p_objSplit.PassingPercentage, 1) & "%"  '& Chr(60) & "scale value" & Chr(61) & Chr(34) & "0.73" & Chr(34) & Chr(62) & "%"  & chr(60) & "/scale" & Chr(62)
-            sStat = FormatNumber(100 * p_objSplit.PassingPercentage, 0) & "%"  '& Chr(60) & "scale value" & Chr(61) & Chr(34) & "0.73" & Chr(34) & Chr(62) & "%"  & chr(60) & "/scale" & Chr(62)
+            sStat = FormatNumber(100 * p_objSplit.PassingPercentage, 1) & "%"  '& Chr(60) & "scale value" & Chr(61) & Chr(34) & "0.73" & Chr(34) & Chr(62) & "%"  & chr(60) & "/scale" & Chr(62)
         Case "SHOTS"
             sStat = p_objSplit.Shots
         Case "SHOTS ON GOAL"
