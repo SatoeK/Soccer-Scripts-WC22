@@ -2299,15 +2299,15 @@ Sub UpdateMultipleCommentatorsWithHead()
 
 		For i = 1 to 4
 
-			If Len(Trim(.Commentators(i).FirstName)) > 0 Then
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i) & "_LOAD=" & .Commentators(i).FirstName)
-				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i)+1 & "_LOAD=" & .Commentators(i).LastName)
+			If Len(Trim(.MultiCommentators(i).FirstName)) > 0 Then
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i) & "_LOAD=" & .MultiCommentators(i).FirstName)
+				Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/TEXT" & (2*i)+1 & "_LOAD=" & .MultiCommentators(i).LastName)
 				
 				If i = 1 then
-					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD_LOAD=" & .CommentatorsHeadshots(i))
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD_LOAD=" & .MultiCommentatorsHeadshots(i))
 					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE_LOAD=1")
 				Else
-					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD" & i & "_LOAD=" & .CommentatorsHeadshots(i))
+					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/PLAYERHEAD" & i & "_LOAD=" & .MultiCommentatorsHeadshots(i))
 					Viz_Send(VizLayer & "*FUNCTION*DataPool*Data SET COMMENTATORS/HEADVISIBLE" & i & "_LOAD=1")
 				End If
 
