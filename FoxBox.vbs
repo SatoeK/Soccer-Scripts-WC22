@@ -1905,30 +1905,15 @@ Sub Insert_MultilineTeamStats()
 	dim statTitle
 	dim team1stat, team2stat
 
-	With PluginSettings
+	With Plugin
 
-		For i = 0 to numStats - 1
-			statTitle = Get_SelectedTeamStat(.TeamStatsSelected(i))
+		For i = 1 to numStats
+			statTitle = Get_SelectedTeamStat(.TeamStatsSelectedIndex(i))
 			team1stat = Get_TeamStat(objHomeSplit, statTitle)
 			team2stat = Get_TeamStat(objVisitorsSplit, statTitle)
 			
-			Call Set_TeamComparionsStats(statTitle, team1stat, team2stat, i+1)
+			Call Set_TeamComparionsStats(statTitle, team1stat, team2stat, i)
 		Next
-
-		'sSelectedStat1 = Get_SelectedTeamStat(.TeamStatsSelected(0))
-		'row1stat1 = Get_TeamStat(objHomeSplit, sSelectedStat1)
-		'row1stat2 = Get_TeamStat(objVisitorsSplit, sSelectedStat1)
-		'Call Set_TeamComparionsStats(sSelectedStat1, row1stat1, row1stat2, 1)
-
-		'sSelectedStat2 = Get_SelectedTeamStat(.TeamStatsSelected(1))
-		'row2stat1 = Get_TeamStat(objHomeSplit, sSelectedStat2)
-		'row2stat2 = Get_TeamStat(objVisitorsSplit, sSelectedStat2)
-		'Call Set_TeamComparionsStats(sSelectedStat2, row2stat1, row2stat2, 2)
-
-		'sSelectedStat3 = Get_SelectedTeamStat(.TeamStatsSelected(2))
-		'row3stat1 = Get_TeamStat(objHomeSplit, sSelectedStat3)
-		'row3stat2 = Get_TeamStat(objVisitorsSplit, sSelectedStat3)
-		'Call Set_TeamComparionsStats(sSelectedStat3, row3stat1, row3stat2, 3)
 		
 		Select Case numStats
 			Case 1
@@ -1950,11 +1935,9 @@ Function Get_NumberOfTeamStats()
 
 	numStatLines = 0
 
-	With PluginSettings
-		'Loop from 0 to 2
-		For i = 0 to 2
-
-			sSelectedStat = Get_SelectedTeamStat(.TeamStatsSelected(i))
+	With Plugin
+		For i = 1 to 3
+			sSelectedStat = Get_SelectedTeamStat(.TeamStatsSelectedIndex(i))
 
 			if sSelectedStat = "NONE" Then
 				Exit For
@@ -1964,7 +1947,7 @@ Function Get_NumberOfTeamStats()
 		Next
 
 	End With
-
+	
 	Get_NumberOfTeamStats = numStatLines
 
 
